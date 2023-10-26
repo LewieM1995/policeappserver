@@ -1,3 +1,4 @@
+const CountData = require("./CountData");
 
 exports.ByLocation = async (req, res) => {
     try {
@@ -50,28 +51,20 @@ exports.ByLocation = async (req, res) => {
       const street = parsedData.map((item) => item.location.street.name);
       const uniqueStreet = [...new Set(street)];
       const searchObject = parsedData.map((v) => v.object_of_search);
-      const uniqueSearchObj = [...new Set(searchObject)];
+      //const uniqueSearchObj = [...new Set(searchObject)];
       const outcome = parsedData.map((item) => item.outcome);
-      const outcomeCounts = {};
-      outcome.forEach((item) => {
-        if (outcomeCounts[item]){
-          outcomeCounts[item]++
-        } else {
-          outcomeCounts[item] = 1
-        }
-      });
-      const uniqueOutcome = [...new Set(outcome)];
-      const outcomeWithCounts = uniqueOutcome.map((item) => ({
-        outcome: item,
-        count: outcomeCounts[item]
-      }));
+      const outcomeWithCounts = CountData(outcome);
+
+      const searchObjectCount = CountData(searchObject);
+      console.log("objectCount:", searchObjectCount)
+      console.log("outcomeCount:", outcomeWithCounts)
 
       const clientData = {
         males, 
         females,
         date,
         uniqueStreet,
-        uniqueSearchObj,
+        searchObjectCount,
         outcomeWithCounts
       };
   
