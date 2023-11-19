@@ -5,7 +5,6 @@ const http = require('http');
 require('dotenv').config();
 
 //app
-
 const app = express();
 app.use(express.json());
 

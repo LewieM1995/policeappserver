@@ -2,7 +2,6 @@ const CountData = require("./CountData");
 
 exports.ByLocation = async (req, res) => {
     try {
- 
       
       let date = req.body.date
       if (!req.body.date){
@@ -34,7 +33,6 @@ exports.ByLocation = async (req, res) => {
           apiUrl = `https://data.police.uk/api/stops-street?poly=${poly}&date=${date}`;
         }
       }
-     
   
       const apiResponsePoly = await fetch(apiUrl);
   
@@ -48,24 +46,21 @@ exports.ByLocation = async (req, res) => {
 
       const males = parsedData.filter((v) => v.gender === 'Male').length;
       const females = parsedData.filter((v) => v.gender === 'Female').length;
-      const street = parsedData.map((item) => item.location.street.name);
-      const uniqueStreet = [...new Set(street)];
       const searchObject = parsedData.map((v) => v.object_of_search);
       //const uniqueSearchObj = [...new Set(searchObject)];
       const outcome = parsedData.map((item) => item.outcome);
       const outcomeWithCounts = CountData(outcome);
-
       const searchObjectCount = CountData(searchObject);
-      console.log("objectCount:", searchObjectCount)
-      console.log("outcomeCount:", outcomeWithCounts)
+      const ethnicity = parsedData.map((item) => item.officer_defined_ethnicity);
+      const ethnicityCount = CountData(ethnicity);
 
       const clientData = {
         males, 
         females,
         date,
-        uniqueStreet,
         searchObjectCount,
-        outcomeWithCounts
+        outcomeWithCounts,
+        ethnicityCount
       };
   
       res.setHeader('Content-Type', 'application/json');

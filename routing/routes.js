@@ -3,7 +3,6 @@ const router = express.Router();
 
 //import controllers
 const { ByLocation } = require('../controllers/ByLocation');
-const { ByCoordinate} = require('../controllers/ByCoordinate');
 
 //api routes
 
@@ -12,7 +11,6 @@ router.use((req, res, next) => {
     next();
   });
 
-router.post('/coordinate', ByCoordinate);
 router.post('/location', ByLocation);
 
 
