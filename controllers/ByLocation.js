@@ -6,7 +6,7 @@ exports.ByLocation = async (req, res) => {
       let date = req.body.date
       if (!req.body.date){
        date = '2023-05'
-      } 
+      }
 
       let poly;
       let apiUrl;
@@ -16,23 +16,25 @@ exports.ByLocation = async (req, res) => {
         poly = lat.map((latV, index) => `${latV},${lng[index]}`).join(':');
         apiUrl = `https://data.police.uk/api/stops-street?poly=${poly}&date=${date}`;
       } else if (req.body.coordinates) {
+        //console.log(req.body.coordinates)
         const { userLat = [], userLng = [] } = req.body.coordinates;
-        const minArrayLength = Math.min(userLat.length, userLng.length);
-        const pairedCoords = [];
-
-        for (let i = 0; i < minArrayLength; i++){
-          if (userLat[i] !== "" && userLng[i] !== ""){
-            pairedCoords.push(`${userLat[i]},${userLng[i]}`);
+        const nonEmptyCoords = userLat.reduce((acc, lat, index) => {
+          const lng = userLng[index];
+          if (lat.trim() !== '' && lng.trim() !== '') {
+            acc.push(`${lat.trim()},${lng.trim()}`);
           }
-        }
-        if (pairedCoords.length === 1){
-          const [singleLat, singleLng] = pairedCoords[0].split(',');
+          return acc;
+        }, []);
+      
+        if (nonEmptyCoords.length === 1) {
+          const [singleLat, singleLng] = nonEmptyCoords[0].split(',');
           apiUrl = `https://data.police.uk/api/stops-street?lat=${singleLat}&lng=${singleLng}&date=${date}`;
-        } else {
-          poly = pairedCoords.join(":");
+        } else if (nonEmptyCoords.length > 1) {
+          poly = nonEmptyCoords.join(":");
           apiUrl = `https://data.police.uk/api/stops-street?poly=${poly}&date=${date}`;
         }
       }
+      //console.log(apiUrl)
   
       const apiResponsePoly = await fetch(apiUrl);
   
@@ -43,24 +45,42 @@ exports.ByLocation = async (req, res) => {
       const parsedData = await apiResponsePoly.json();
   
       //perform further data processing here if necessary
-
-      const males = parsedData.filter((v) => v.gender === 'Male').length;
-      const females = parsedData.filter((v) => v.gender === 'Female').length;
-      const searchObject = parsedData.map((v) => v.object_of_search);
-      //const uniqueSearchObj = [...new Set(searchObject)];
-      const outcome = parsedData.map((item) => item.outcome);
-      const outcomeWithCounts = CountData(outcome);
-      const searchObjectCount = CountData(searchObject);
-      const ethnicity = parsedData.map((item) => item.officer_defined_ethnicity);
-      const ethnicityCount = CountData(ethnicity);
+      const dataSummary = parsedData.reduce(
+        (summary, item) => {
+          // Count gender occurrences
+          summary.males += item.gender === 'Male' ? 1 : 0;
+          summary.females += item.gender === 'Female' ? 1 : 0;
+  
+          // Collect object_of_search and outcome
+          summary.searchObject.push(item.object_of_search);
+          summary.outcome.push(item.outcome);
+  
+          // Collect officer_defined_ethnicity
+          summary.ethnicity.push(item.officer_defined_ethnicity);
+  
+          return summary;
+        },
+        {
+          males: 0,
+          females: 0,
+          searchObject: [],
+          outcome: [],
+          ethnicity: [],
+        }
+      );
+  
+      // Count occurrences for each collected data
+      const searchObjectCount = CountData(dataSummary.searchObject);
+      const outcomeWithCounts = CountData(dataSummary.outcome);
+      const ethnicityCount = CountData(dataSummary.ethnicity);
 
       const clientData = {
-        males, 
-        females,
+        males: dataSummary.males,
+        females: dataSummary.females,
         date,
         searchObjectCount,
         outcomeWithCounts,
-        ethnicityCount
+        ethnicityCount,
       };
   
       res.setHeader('Content-Type', 'application/json');
