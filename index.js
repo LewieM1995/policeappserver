@@ -1,7 +1,8 @@
 //import modules
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
+const https = require('http');
+const fs = require('fs');
 require('dotenv').config();
 const pool = require('./database');
 
@@ -27,8 +28,15 @@ pool.getConnection((err, connection) => {
     //routes
     const Routes = require('./routing/routes');
     app.use('/', Routes);
+
+    const options = {
+        key: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/cert.pem'),
+        ca: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/chain.pem'),
+    };
     
-    const server = http.createServer(app);
+    
+    const server = https.createServer(options, app);
     
     //porting
     const port = process.env.PORT || 4000;
