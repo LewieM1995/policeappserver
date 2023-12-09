@@ -50,11 +50,12 @@ exports.ByForce = async (req, res) => {
   const existingData = await connection.execute(query, values);
 
   if (existingData[0].length > 0) {
-    //console.log('Data found. Retrieving from cache');
+    // Data found. Retrieving from cache
     res.setHeader('Content-Type', 'application/json');
-    res.json(existingData[0]);
+    res.status(200).json(existingData[0]);
     return;
-  }
+}
+
 
   const insertQuery = 'INSERT INTO stops (id, age_range, self_defined_ethnicity, outcome_linked_to_object_of_search, datetime, removal_of_more_than_outer_clothing, operation, officer_defined_ethnicity, object_of_search, involved_person, gender, legislation, location_latitude, location_street_id, location_street_name, location_longitude, outcome, type, operation_name, forcename, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
