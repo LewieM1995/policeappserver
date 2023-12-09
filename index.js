@@ -11,6 +11,8 @@ const app = express();
 app.use(express.json());
 
 //middleware
+app.options('*', cors());
+
 app.use(cors({
     origin: ['https://main.d2ua1ewdznhv26.amplifyapp.com', 'http://localhost:3000', 'http://localhost:4000'],
     methods: ['GET', 'POST'],
