@@ -1,7 +1,7 @@
 //import modules
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
+//const http = require('http');
 require('dotenv').config();
 const pool = require('./database');
 
@@ -28,11 +28,11 @@ pool.getConnection((err, connection) => {
     const Routes = require('./routing/routes');
     app.use('/', Routes);
     
-    const server = http.createServer(app);
+    //const server = http.createServer(app);
     
     //porting
     const port = process.env.PORT || 4000;
     //listener
-    server.listen(port, () => console.log(`Server is Live ${port}`));
+    app.listen(port, () => console.log(`Server is Live ${port}`));
 });
 
