@@ -44,5 +44,6 @@ pool.getConnection((err, connection) => {
     const port = process.env.PORT || 4000;
     //listener
     server.listen(port, () => console.log(`Server is Live ${port}`));
+    console.log('Server started successfully');
 });
 
