@@ -32,9 +32,9 @@ pool.getConnection((err, connection) => {
     app.use('/', Routes);
 
     const options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/live/policeappsever.duckdns.org/chain.pem'),
+        key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
+        ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
     };
     
     
