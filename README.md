@@ -4,7 +4,9 @@ This server is the backend component of the Police App. It communicates with the
 
 Installation Instructions
 Clone the Repository:
+
 git clone https://github.com/LewieM1995/policeappserver.git
+
 cd policeappserver
 
 Install Dependencies:
