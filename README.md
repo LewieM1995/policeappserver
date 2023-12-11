@@ -2,7 +2,7 @@
 ## Description
 This server is the backend component of the Police App. It communicates with the Police API to retrieve data and serves as the data provider for the Next.js frontend application. It includes endpoints for searching by coordinates and specific police forces.
 
-Installation Instructions
+## Installation Instructions
 Clone the Repository:
 
 git clone https://github.com/LewieM1995/policeappserver.git
