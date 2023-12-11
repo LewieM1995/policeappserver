@@ -10,12 +10,15 @@ git clone https://github.com/LewieM1995/policeappserver.git
 cd policeappserver
 
 Install Dependencies:
+
 npm install
 
 Configure Environment Variables:
+
 Create a .env file at the root and store any necessary API keys or authentication details for a database etc.
 
 Run the Server:
+
 node index.js
 
 ## Note:
