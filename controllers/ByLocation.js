@@ -50,15 +50,13 @@ exports.ByLocation = async (req, res) => {
       //perform further data processing here if necessary
       const dataSummary = parsedData.reduce(
         (summary, item) => {
-          // Count gender occurrences
-          summary.males += item.gender === 'Male' ? 1 : 0;
-          summary.females += item.gender === 'Female' ? 1 : 0;
+          // Count genders
+          summary.males = summary.males + (item.gender === 'Male' ? 1 : 0);
+          summary.females = summary.females + (item.gender === 'Female' ? 1 : 0);
   
-          // Collect object_of_search and outcome
+          // Collect other obejcts. Perform count below
           summary.searchObject.push(item.object_of_search);
           summary.outcome.push(item.outcome);
-  
-          // Collect officer_defined_ethnicity
           summary.ethnicity.push(item.officer_defined_ethnicity);
   
           return summary;
