@@ -9,7 +9,7 @@ exports.GetDataById = async (req, res) => {
 
   //console.log(req.params);
 
-  const connection = await pool1.promise();
+  const connection = await pool1.promise().getConnection();
 
   const query = 'SELECT * FROM `stops` WHERE `id` = ? ';
   const values = [id];

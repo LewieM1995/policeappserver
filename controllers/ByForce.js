@@ -49,7 +49,7 @@ exports.ByForce = async (req, res) => {
 
   //console.log('Data with IDs:', dataWithIds);
 
-  const connection = await pool1.promise();
+  const connection = await pool1.promise().getConnection();
 
   const query = 'SELECT * FROM `stops` WHERE `forcename` = ? AND `date` = ?';
   const values = [forcename, date];
