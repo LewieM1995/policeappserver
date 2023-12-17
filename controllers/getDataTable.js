@@ -1,4 +1,4 @@
-const pool = require('../database');
+const {pool2} = require('../database');
 require('dotenv').config();
 
 function formatDate(dateString) {
@@ -14,7 +14,7 @@ function formatDate(dateString) {
 
 exports.getDataTable = async (req, res) => {
   try {
-    const connection = await pool.promise().getConnection();
+    const connection = await pool2.promise().getConnection();
     try {
 
       const productSize = req.query.productSize;

@@ -4,7 +4,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 require('dotenv').config();
-const pool = require('./database');
+const { pool1, pool2 } = require('./database');
 
 //app
 const app = express();
@@ -19,31 +19,44 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-pool.getConnection((err, connection) => {
-    if (err){
-        console.error('Error conneting to database', err);
-        return;
-    }
-    console.log('Connected to policedata');
-    
-    
-    //routes
-    const Routes = require('./routing/routes');
-    app.use('/', Routes);
-
-    const options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
-    };
-    
-    
-    const server = https.createServer(options, app);
-    
-    //porting
-    const port = process.env.PORT || 4000;
-    //listener
-    server.listen(port, () => console.log(`Server is Live ${port}`));
-    console.log('Server started successfully');
+/* POLICEAPP ROUTES AND DB CONNECTION */
+app.use('/policeapp', (req, res, next) => {
+    req.pool = pool1;
+    next();
+    console.log('Connected to policeapp database');
 });
+const policeAppRoutes = require('./routing/routes');
+app.use('/policeapp', policeAppRoutes);
+//End Connection
+app.use('/policeapp', (req, res, next) => {
+    req.pool.end();
+    next();
+});
+
+
+/* Ringcon ROUTES AND DB CONNECTION */
+app.use('/ringcon', (req, res, next) => {
+    req.pool = pool2;
+    next();
+    console.log('Connected to ringcon database');
+});
+const ringconRoutes = require('./routing/routes');
+app.use('/ringcon', ringconRoutes);
+//End Connection
+app.use('/ringcon', (req, res, next) => {
+    req.pool.end();
+    next();
+});
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
+};
+
+const server = https.createServer(options, app);  
+//porting
+const port = process.env.PORT || 4000;
+//listener
+server.listen(port, () => console.log(`Server is Live ${port}`));
 

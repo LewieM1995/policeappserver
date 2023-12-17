@@ -1,4 +1,4 @@
-const pool = require('../database');
+const {pool2} = require('../database');
 require('dotenv').config();
 
 exports.postData = async (req, res) => {
@@ -19,7 +19,7 @@ exports.postData = async (req, res) => {
 
     console.log("Received Data", req.body);
 
-    const connection = await pool.promise().getConnection();
+    const connection = await pool2.promise().getConnection();
     //console.log(connection);
 
     try {

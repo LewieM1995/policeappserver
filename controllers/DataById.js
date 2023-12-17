@@ -1,6 +1,6 @@
 
 
-const pool = require('../database');
+const pool1 = require('../database');
 
 exports.GetDataById = async (req, res) => {
  try {
@@ -9,7 +9,7 @@ exports.GetDataById = async (req, res) => {
 
   //console.log(req.params);
 
-  const connection = pool.promise();
+  const connection = pool1.promise();
 
   const query = 'SELECT * FROM `stops` WHERE `id` = ? ';
   const values = [id];
