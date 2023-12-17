@@ -2,8 +2,10 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const pool1 = mysql.createPool({
-  host: process.env.DB_HOST,
+
+const createPool1 = () => {
+  return mysql.createPool({
+    host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -11,9 +13,11 @@ const pool1 = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 50,
   queueLimit: 0
-});
+  }).promise();
+};
 
-const pool2 = mysql.createPool({
+const createPool2 = () => {
+  return mysql.createPool({
   host: process.env.DB_HOST_2,
   user: process.env.DB_USER_2,
   password: process.env.DB_PASSWORD_2,
@@ -22,8 +26,9 @@ const pool2 = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 50,
   queueLimit: 0
-});
+  }).promise();
+};
 
 
-module.exports = { pool1: pool1.promise(), pool2: pool2.promise() };
+module.exports = { createPool1, createPool2 };
 

@@ -3,7 +3,7 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 require('dotenv').config();
-const { pool1, pool2 } = require('./database');
+const { createPool1, createPool2 } = require('./database');
 const { policeAppRouter, ringconRouter } = require('./routing/routes');
 
 // App
@@ -17,6 +17,9 @@ app.use(cors({
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+const pool1 = createPool1();
+const pool2 = createPool2();
 
 /* POLICEAPP ROUTES AND DB CONNECTION */
 app.use('/policeapp', (req, res, next) => {
