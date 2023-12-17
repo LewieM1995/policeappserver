@@ -25,5 +25,5 @@ const pool2 = mysql.createPool({
 });
 
 
-module.exports = {pool1, pool2};
+module.exports = { pool1: pool1.promise(), pool2: pool2.promise() };
 
