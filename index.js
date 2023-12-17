@@ -4,6 +4,7 @@ const https = require('https');
 const fs = require('fs');
 require('dotenv').config();
 const { pool1, pool2 } = require('./database');
+const { policeAppRouter, ringconRouter } = require('./routing/routes');
 
 // App
 const app = express();
@@ -18,7 +19,6 @@ app.use(cors({
 }));
 
 /* POLICEAPP ROUTES AND DB CONNECTION */
-const policeAppRouter = require('./routing/routes');
 app.use('/policeapp', (req, res, next) => {
     req.pool = pool1;
     console.log('Connected to policeapp database');
@@ -27,7 +27,6 @@ app.use('/policeapp', (req, res, next) => {
 app.use('/policeapp', policeAppRouter);
 
 /* Ringcon ROUTES AND DB CONNECTION */
-const ringconRouter = require('./routing/routes');
 app.use('/ringcon', (req, res, next) => {
     req.pool = pool2;
     console.log('Connected to ringcon database');
