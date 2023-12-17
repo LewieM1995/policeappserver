@@ -32,8 +32,8 @@ exports.getData = async (req, res) => {
       
 
     const [data] = await connection.execute(query);
-    //console.log('Query Result:', data);
-    //console.log('Sample Row:', data[0]);
+    console.log('Query Result:', data);
+    console.log('Sample Row:', data[0]);
 
 
 
