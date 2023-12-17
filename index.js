@@ -27,11 +27,7 @@ app.use('/policeapp', (req, res, next) => {
 });
 const policeAppRoutes = require('./routing/routes');
 app.use('/policeapp', policeAppRoutes);
-//End Connection
-app.use('/policeapp', (req, res, next) => {
-    req.pool.end();
-    next();
-});
+
 
 
 /* Ringcon ROUTES AND DB CONNECTION */
@@ -42,11 +38,7 @@ app.use('/ringcon', (req, res, next) => {
 });
 const ringconRoutes = require('./routing/routes');
 app.use('/ringcon', ringconRoutes);
-//End Connection
-app.use('/ringcon', (req, res, next) => {
-    req.pool.end();
-    next();
-});
+
 
 const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
