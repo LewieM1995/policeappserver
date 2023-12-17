@@ -1,6 +1,6 @@
 
 
-const pool1 = require('../database');
+const {pool1} = require('../database');
 
 exports.GetDataById = async (req, res) => {
  try {

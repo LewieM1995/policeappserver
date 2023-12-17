@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const testUniqueIds = require('../middleware/UniqueTest');
-const pool1 = require('../database');
+const {pool1} = require('../database');
 const mysql = require('mysql2');
 
 function hashString(input) {
