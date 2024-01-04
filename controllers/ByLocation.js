@@ -6,17 +6,17 @@ exports.ByLocation = async (req, res) => {
       let date = req.body.date || '2023-05';
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
-      const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+      const currentDate = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
 
-      console.log("req.body.date", req.body.date);
-      console.log("currentDate", currentDate);
+      //console.log("req.body.date", req.body.date);
+      //console.log("currentDate", currentDate);
 
       if (date === currentDate) {
           // Setting date to the previous month and year if current date is january
           const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
           const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
           date = `${lastYear}-${lastMonth.toString().padStart(2, '0')}`;
-          console.log("update date:", date);
+          //console.log("update date:", date);
       };
 
 
