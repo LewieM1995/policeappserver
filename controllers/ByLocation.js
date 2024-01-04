@@ -3,15 +3,14 @@ const CountData = require("./CountData");
 exports.ByLocation = async (req, res) => {
     try {
       
-      let date = req.body.date || '2023-05';
+      let date = req.body.date || '2023-11';
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       const currentDate = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
 
       //console.log("req.body.date", req.body.date);
       //console.log("currentDate", currentDate);
-
-      if (date === currentDate) {
+      if (req.body.date === currentDate) {
           // Setting date to the previous month and year if current date is january
           const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
           const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
