@@ -15,14 +15,12 @@ exports.ByForce = async (req, res) => {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-    //console.log("req.body.date", req.body.date);
-    //console.log("currentDate", currentDate);
+    
     if (req.body.date === currentDate) {
       // Setting date to the previous month and year if current date is january
       const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
       const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
       date = `${lastYear}-${lastMonth.toString().padStart(2, "0")}`;
-      //console.log("update date:", date);
     }
 
     const forcename = req.body.dropdownvalue;
@@ -104,6 +102,9 @@ exports.ByForce = async (req, res) => {
 
     //await connection.end();
     //const test = testUniqueIds(dataWithIds);
+    console.log("req.body.date", req.body.date);
+    console.log("currentDate", currentDate);
+    console.log("update date:", date);
     console.log("New data inserted. Returning updated data.");
     res.setHeader("Content-Type", "application/json");
     res.json(dataWithIds);
