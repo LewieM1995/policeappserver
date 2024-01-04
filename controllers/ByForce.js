@@ -15,10 +15,6 @@ exports.ByForce = async (req, res) => {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-    
-    if (date === currentDate || "2023-12") {
-      date = "2023-11";
-    }
 
     const forcename = req.body.dropdownvalue;
 
