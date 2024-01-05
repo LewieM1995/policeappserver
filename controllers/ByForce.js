@@ -23,6 +23,10 @@ exports.ByForce = async (req, res) => {
       date = `${lastYear}-${lastMonth.toString().padStart(2, "0")}`;
     }
 
+    console.log("req.body.date", req.body.date);
+    console.log("currentDate", currentDate);
+    console.log("update date:", date);
+
     const forcename = req.body.dropdownvalue;
 
     let apiUrl = `https://data.police.uk/api/stops-force?force=${forcename}&date=${date}`;
@@ -102,9 +106,6 @@ exports.ByForce = async (req, res) => {
 
     //await connection.end();
     //const test = testUniqueIds(dataWithIds);
-    console.log("req.body.date", req.body.date);
-    console.log("currentDate", currentDate);
-    console.log("update date:", date);
     console.log("New data inserted. Returning updated data.");
     res.setHeader("Content-Type", "application/json");
     res.json(dataWithIds);
