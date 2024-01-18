@@ -1,7 +1,5 @@
 const crypto = require('crypto');
-const testUniqueIds = require('../middleware/UniqueTest');
 const pool = require('../database');
-const mysql = require('mysql2');
 
 function hashString(input) {
   const hash = crypto.createHash('sha256');
@@ -12,13 +10,16 @@ function hashString(input) {
 exports.ByForce = async (req, res) => {
  try {
     
-  let date = req.body.date || '2023-05';
+  let date = req.body.date || '2023-09';
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-    if (date === currentDate){
-        date = '2023-05'
-      }
+    if (date === currentDate) {
+      // Setting date to the previous month and year if current date is january (currently an issue with 2023-12 on police api end setting to nov instead)
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+      date = `${lastYear}-${(lastMonth).toString().padStart(2, "0")}`;
+    }
   
   const forcename = req.body.dropdownvalue;
 

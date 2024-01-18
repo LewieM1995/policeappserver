@@ -1,15 +1,21 @@
+
 const CountData = require("./CountData");
 
 exports.ByLocation = async (req, res) => {
     try {
       
-      let date = req.body.date || '2023-05';
+      let date = req.body.date || '2023-09';
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       const currentDate = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
-      if (date === currentDate){
-        date = '2023-05'
+      //console.log(currentDate, date);
+      if (date === currentDate) {
+        // Setting date to the previous month and year if current date is january
+        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+        const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+        date = `${lastYear}-${(lastMonth).toString().padStart(2, "0")}`;
       }
+      //console.log(date)
 
       let poly;
       let apiUrl;
@@ -75,7 +81,46 @@ exports.ByLocation = async (req, res) => {
       const outcomeWithCounts = CountData(dataSummary.outcome);
       const ethnicityCount = CountData(dataSummary.ethnicity);
 
-      const clientData = {
+
+      //prparing batching to client
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Transfer-Encoding', 'chunked');
+      res.setHeader('Cache-Control', 'no-cache');
+
+      // first batch
+      res.write(JSON.stringify({
+        males: dataSummary.males,
+        females: dataSummary.females,
+        date,
+        searchObjectCount,
+      }) + '\n');
+
+
+      // second batch resolves after 2s
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      res.write(JSON.stringify({
+        outcomeWithCounts,
+      }) + '\n');
+
+      // final batch resolves after 2s
+      await new Promise(resovle => setTimeout(resovle, 4000));
+
+      res.write(JSON.stringify({
+        ethnicityCount,
+      }) + '\n' );
+
+      res.end();
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  
+/* 
+
+const clientData = {
         males: dataSummary.males,
         females: dataSummary.females,
         date,
@@ -85,12 +130,5 @@ exports.ByLocation = async (req, res) => {
       };
   
       res.setHeader('Content-Type', 'application/json');
-      res.json(clientData);
-      //console.log(clientData);
-    } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
 
-  
+*/
