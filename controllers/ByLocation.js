@@ -1,3 +1,4 @@
+
 const CountData = require("./CountData");
 
 exports.ByLocation = async (req, res) => {
