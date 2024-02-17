@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
+const https = require('http');
 const fs = require('fs');
 require('dotenv').config();
 const { pool1, pool2 } = require('./database');
@@ -18,31 +18,41 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-pool.getConnection((err, connection) => {
-    if (err){
-        console.error('Error conneting to database', err);
+pool1.getConnection((err, connection1) => {
+    if (err) {
+        console.error('Error connecting to database pool1', err);
         return;
     }
-    console.log('Connected to policedata');
-    
-    
-    //routes
-    const Routes = require('./routing/routes');
-    app.use('/', Routes);
+    console.log('Connected to pool1');
 
-    const options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
-    };
-    
-    
-    const server = https.createServer(options, app);
-    
-    //porting
-    const port = process.env.PORT || 4000;
-    //listener
-    server.listen(port, () => console.log(`Server is Live ${port}`));
-    console.log('Server started successfully');
+    // Routes using pool1
+    app.use('/policeapp', policeAppRouter(connection1));
 });
+
+pool2.getConnection((err, connection2) => {
+    if (err) {
+        console.error('Error connecting to database pool1', err);
+        return;
+    }
+    console.log('Connected to pool2');
+
+    // Routes using pool1
+    app.use('/ringcon', ringconRouter(connection2));
+});
+
+
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
+};
+    
+    
+const server = https.createServer(options, app);
+    
+//porting
+const port = process.env.PORT || 4000;
+//listener
+server.listen(port, () => console.log(`Server is Live ${port}`));
+console.log('Server started successfully');
 
