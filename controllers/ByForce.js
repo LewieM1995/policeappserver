@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const pool = require('../database');
+const {pool1} = require('../database');
 
 function hashString(input) {
   const hash = crypto.createHash('sha256');
@@ -50,7 +50,7 @@ exports.ByForce = async (req, res) => {
 
   //console.log('Data with IDs:', dataWithIds);
 
-  const connection = pool.promise();
+  const connection = pool1.promise();
 
   const query = 'SELECT * FROM `stops` WHERE `forcename` = ? AND `date` = ?';
   const values = [forcename, date];
