@@ -5,6 +5,7 @@ const fs = require('fs');
 require('dotenv').config();
 const { pool1, pool2 } = require('./database');
 const { policeAppRouter, ringconRouter } = require('./routing/routes');
+const emailRouter = require('./controllers/postEmail');
 
 // App
 const app = express();
@@ -17,6 +18,10 @@ app.use(cors({
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+//MailtoRoute
+app.use('/', emailRouter);
+
 
 pool1.getConnection((err, connection1) => {
     if (err) {
@@ -50,10 +55,10 @@ pool2.getConnection((err, connection2) => {
         key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
         cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
-    }; 
+    };
     
     
-    const server = https.createServer(options, app);
+    const server = https.createServer( options, app);
     
     //porting
     const port = process.env.PORT || 4000;
