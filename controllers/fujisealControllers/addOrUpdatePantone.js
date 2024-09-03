@@ -1,4 +1,4 @@
-const {pool3} = require('../../database'); // Adjust the path to your database module
+const { pool3 } = require('../../database'); // Adjust the path to your database module
 
 const addPantone = async (req, res) => {
   try {
@@ -9,9 +9,9 @@ const addPantone = async (req, res) => {
     // Validate the provided data
     if (label && value && type) {
       // Check for duplicate Pantones
-      const [duplicates] = pool3.query(
-          'SELECT * FROM pantones WHERE value = ? OR label = ?',
-          [value, label]
+      const [duplicates] = await pool3.promise().query(
+        'SELECT * FROM pantones WHERE value = ? OR label = ?',
+        [value, label]
       );
 
       if (duplicates.length > 0) {
@@ -25,7 +25,7 @@ const addPantone = async (req, res) => {
       `;
 
       // Execute the query with the provided data
-      const [result] = pool3.query(query, [label, value, type, hex, r, g, b]);
+      const [result] = await pool3.promise().query(query, [label, value, type, hex, r, g, b]);
 
       // Check if the insertion was successful
       if (result.affectedRows > 0) {

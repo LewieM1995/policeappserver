@@ -1,6 +1,7 @@
-const {pool3 }= require("../../database"); // Replace with your actual database connection module
+const { pool3 } = require("../../database"); // Replace with your actual database connection module
 
 const postQuarantineInks = async (req, res) => {
+  let connection;
   try {
     const { formState } = req.body;
     console.log(req.body);
@@ -31,34 +32,39 @@ const postQuarantineInks = async (req, res) => {
     ];
 
     // Get a database connection from the pool3
-    const client = pool3.getConnection();
+    connection = await pool3.promise().getConnection();
 
     try {
       // Begin transaction
-      await client.beginTransaction();
+      await connection.beginTransaction();
 
       // Insert main data
-      await client.query(mainInsertQuery, mainInsertValues);
+      await connection.query(mainInsertQuery, mainInsertValues);
 
       // Commit transaction
-      await client.commit();
+      await connection.commit();
       res.json({ success: true, message: "Data inserted successfully" });
     } catch (error) {
       // Rollback transaction in case of error
-      await client.rollback();
+      await connection.rollback();
       console.error("Error inserting data:", error);
-      res
-        .status(500)
-        .json({ error: "Internal Server Error: postQuarantineInks.js" });
+      res.status(500).json({ error: "Internal Server Error: postQuarantineInks.js" });
     } finally {
-      // Release the client back to the pool3
-      client.release();
+      // Release the connection back to the pool3
+      connection.release();
     }
   } catch (error) {
     console.error("Error processing request:", error);
-    res
-      .status(500)
-      .json({ error: "Internal Server Error: postQuarantineInks.js" });
+    if (connection) {
+      try {
+        await connection.rollback();
+      } catch (rollbackError) {
+        console.error("Error rolling back transaction:", rollbackError);
+      } finally {
+        connection.release();
+      }
+    }
+    res.status(500).json({ error: "Internal Server Error: postQuarantineInks.js" });
   }
 };
 

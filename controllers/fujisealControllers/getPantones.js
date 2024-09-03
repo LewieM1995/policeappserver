@@ -1,9 +1,9 @@
-const {pool3} = require('../../database'); // Adjust the path to your database module
+const { pool3 } = require('../../database'); // Adjust the path to your database module
 
 const getPantones = async (req, res) => {
   try {
-    // Query to get all Pantones
-    const [rows] = pool3.query('SELECT * FROM pantones');
+    // Use promise-based query method
+    const [rows] = await pool3.promise().query('SELECT * FROM pantones');
 
     // Send the result as a JSON response
     res.status(200).json(rows);

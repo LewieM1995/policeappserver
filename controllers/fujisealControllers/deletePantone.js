@@ -1,4 +1,4 @@
-const {pool3} = require('../../database'); // Adjust the path to your database module
+const { pool3 } = require('../../database'); // Adjust the path to your database module
 
 const deletePantone = async (req, res) => {
   const { id } = req.params;
@@ -13,7 +13,7 @@ const deletePantone = async (req, res) => {
     const query = 'DELETE FROM pantones WHERE id = ?';
 
     // Execute the query with the provided ID
-    const [result] = pool3.query(query, [id]);
+    const [result] = await pool3.promise().query(query, [id]);
 
     // Check if the deletion was successful
     if (result.affectedRows > 0) {

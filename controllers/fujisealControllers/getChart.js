@@ -1,4 +1,4 @@
-const {pool3 }= require("../../database");
+const { pool3 } = require("../../database");
 const {
   prepareAniloxScatterData,
   calculateSAPPercentage,
@@ -18,8 +18,8 @@ const getChart = async (req, res) => {
       return res.status(400).json({ error: "No chart type given." });
     }
 
-    const query = "SELECT * FROM colour_data";
-    const [rows] = pool3.execute(query);
+    // Use promise-based query method
+    const [rows] = await pool3.promise().query("SELECT * FROM colour_data");
 
     const data = rows;
     let chartData;
@@ -56,7 +56,7 @@ const getChart = async (req, res) => {
 
     return res.json({ chartData });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching chart data:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
