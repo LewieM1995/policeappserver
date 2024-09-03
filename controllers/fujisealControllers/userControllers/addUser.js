@@ -18,3 +18,7 @@ const addUser = async (username, password) => {
 
 // Example usage
 addUser('AdminAcc', 'isadminyes1', 1);
+addUser('Ashift', 'letmein1', 0);
+addUser('Bshift', 'letmein1', 0);
+addUser('CShift', 'letmein1', 0);
+addUser('DShift', 'letmein1', 0);

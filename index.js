@@ -57,13 +57,13 @@ app.use("/ringcon", dbConnection(pool2), ringconRouter);
 // Routes using pool3
 app.use("/fujiseal", dbConnection(pool3), fujiRouter);
 
-/*  const options = {
+const options = {
         key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
         cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
-    }; */
+    }; 
 
-const server = https.createServer(/* options, */ app);
+const server = https.createServer( options, app);
 
 //porting
 const port = process.env.PORT || 4000;
