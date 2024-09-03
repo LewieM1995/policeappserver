@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const pool = require('../../../database'); // Adjust the path to your database configuration
+const {pool3} = require('../../../database'); // Adjust the path to your database configuration
 
 const addUser = async (username, password) => {
   try {
@@ -8,7 +8,7 @@ const addUser = async (username, password) => {
 
     const query = 'INSERT INTO users (username, password, isAdmin) VALUES (?, ?, ?)';
     const values = [username, hashedPassword, 1];
-    await pool.query(query, values);
+    await pool3.query(query, values);
 
     console.log('User added successfully');
   } catch (error) {
