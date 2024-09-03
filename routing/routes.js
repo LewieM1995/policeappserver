@@ -1,20 +1,20 @@
 const express = require('express');
 
 // Import controllers
-const { ByLocation } = require('../controllers/ByLocation');
-const { ByForce } = require('../controllers/ByForce');
-const { GetDataById } = require('../controllers/DataById');
-const { postData } = require('../controllers/postData');
-const { getData } = require('../controllers/getData');
-const { getDataTable } = require('../controllers/getDataTable');
-const { addOrUpdatePantone } = require('../controllers/fujisealControllers/addOrUpdatePantone');
-const { getUser } = require('../controllers/fujisealControllers/userControllers/getUser');
-const { getChart } = require('../controllers/fujisealControllers/getChart');
-const { postDataFuji } = require('../controllers/fujisealControllers/postData');
-const { getPantones } = require('../controllers/fujisealControllers/getPantones');
-const { postQuarantineInk } = require('../controllers/fujisealControllers/postQuarantineInk');
-const { updatePantone } = require('../controllers/fujisealControllers/updatePantone');
-const { deletePantone } = require('../controllers/fujisealControllers/deletePantone');
+const {ByLocation} = require('../controllers/ByLocation');
+const {ByForce}  = require('../controllers/ByForce');
+const {GetDataById} = require('../controllers/DataById');
+const {postData} = require('../controllers/postData');
+const {getData} = require('../controllers/getData');
+const {getDataTable} = require('../controllers/getDataTable');
+const addOrUpdatePantone = require('../controllers/fujisealControllers/addOrUpdatePantone');
+const getUser = require('../controllers/fujisealControllers/userControllers/getUser');
+const getChart = require('../controllers/fujisealControllers/getChart');
+const postDataFuji = require('../controllers/fujisealControllers/postData');
+const getPantones = require('../controllers/fujisealControllers/getPantones');
+const postQuarantineInk = require('../controllers/fujisealControllers/postQuarantineInk');
+const updatePantone = require('../controllers/fujisealControllers/updatePantone');
+const deletePantone = require('../controllers/fujisealControllers/deletePantone');
 
 // Routes for policeapp
 const policeAppRouter = express.Router();
