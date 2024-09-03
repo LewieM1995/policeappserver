@@ -14,7 +14,7 @@ const { getDataTable } = require('../controllers/getDataTable');
 const { addOrUpdatePantone } = require('../controllers/fujisealControllers/addOrUpdatePantone');
 const { getUser } = require('../controllers/fujisealControllers/userControllers/getUser');
 const {getChart} = require('../controllers/fujisealControllers/getChart')
-const {postData} = require('../controllers/fujisealControllers/postData');
+const {postDataFuji} = require('../controllers/fujisealControllers/postData');
 const {getPantones} = require('../controllers/fujisealControllers/getPantones');
 const {postQuarantineInk} = require('../controllers/fujisealControllers/postQuarantineInk');
 const {updatePantone} = require('../controllers/fujisealControllers/updatePantone');
@@ -52,7 +52,7 @@ fujiRouter.use((req, res, next) => {
 
 fujiRouter.post('/getUser', getUser);
 fujiRouter.post('/getChart', getChart);
-fujiRouter.post('/postData', postData);
+fujiRouter.post('/postData', postDataFuji);
 fujiRouter.get('/getPantones', getPantones);
 fujiRouter.post('/addPantone', addOrUpdatePantone);
 fujiRouter.post('/postQuarantineInk', postQuarantineInk);
