@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const pool = require('../../../database');
+const {pool3} = require('../../../database');
 
 const getUser = async (req, res) => {
   try {
@@ -12,7 +12,7 @@ const getUser = async (req, res) => {
 
     // Query to find the user by username
     const query = 'SELECT * FROM users WHERE username = ?';
-    const [rows] = await pool.query(query, [username]);
+    const [rows] = pool3.query(query, [username]);
 
     if (rows.length > 0) {
       const user = rows[0];

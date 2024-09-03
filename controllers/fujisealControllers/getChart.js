@@ -1,4 +1,4 @@
-const pool = require("../../database");
+const {pool3 }= require("../../database");
 const {
   prepareAniloxScatterData,
   calculateSAPPercentage,
@@ -19,7 +19,7 @@ const getChart = async (req, res) => {
     }
 
     const query = "SELECT * FROM colour_data";
-    const [rows] = await pool.execute(query);
+    const [rows] = pool3.execute(query);
 
     const data = rows;
     let chartData;

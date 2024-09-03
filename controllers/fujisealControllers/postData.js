@@ -1,4 +1,4 @@
-const pool = require('../../database');
+const {pool3} = require('../../database');
 
 const postData = async (req, res) => {
   try {
@@ -21,7 +21,7 @@ const postData = async (req, res) => {
 
     const mainInsertValues = [PPONum, designNum, speNum, createdAt];
     
-    const client = await pool.getConnection();
+    const client = pool3.getConnection();
 
     try {
       await client.beginTransaction();

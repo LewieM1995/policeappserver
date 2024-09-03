@@ -1,4 +1,4 @@
-const pool = require("../../database"); // Replace with your actual database connection module
+const {pool3 }= require("../../database"); // Replace with your actual database connection module
 
 const postQuarantineInks = async (req, res) => {
   try {
@@ -30,8 +30,8 @@ const postQuarantineInks = async (req, res) => {
       createdAt,
     ];
 
-    // Get a database connection from the pool
-    const client = await pool.getConnection();
+    // Get a database connection from the pool3
+    const client = pool3.getConnection();
 
     try {
       // Begin transaction
@@ -51,7 +51,7 @@ const postQuarantineInks = async (req, res) => {
         .status(500)
         .json({ error: "Internal Server Error: postQuarantineInks.js" });
     } finally {
-      // Release the client back to the pool
+      // Release the client back to the pool3
       client.release();
     }
   } catch (error) {

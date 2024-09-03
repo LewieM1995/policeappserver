@@ -1,4 +1,4 @@
-const pool = require('../../database'); // Adjust the path to your database module
+const {pool3} = require('../../database'); // Adjust the path to your database module
 
 const updatePantone = async (req, res) => {
   try {
@@ -16,7 +16,7 @@ const updatePantone = async (req, res) => {
       `;
 
       // Execute the query with the provided data
-      const [result] = await pool.query(query, [label, value, type, hex, r, g, b, id]);
+      const [result] = pool3.query(query, [label, value, type, hex, r, g, b, id]);
 
       // Check if the update was successful
       if (result.affectedRows > 0) {
