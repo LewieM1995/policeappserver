@@ -8,7 +8,7 @@ const {
   calculateLABTargetingAccuracy,
   calculateRightFirstTime,
   prepareDEOverTimeData,
-} = require("../../fakedata/dataProcessing");
+} = require("../fujisealControllers/dataProcessing/dataProcessing");
 
 const getChart = async (req, res) => {
   try {
