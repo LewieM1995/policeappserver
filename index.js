@@ -1,62 +1,72 @@
-const express = require('express');
-const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
-require('dotenv').config();
-const { pool1, pool2 } = require('./database');
-const { policeAppRouter, ringconRouter } = require('./routing/routes');
+const express = require("express");
+const cors = require("cors");
+const https = require("http");
+const fs = require("fs");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+const { pool1, pool2, pool3 } = require("./database");
+const {
+  policeAppRouter,
+  ringconRouter,
+  fujiRouter,
+} = require("./routing/routes");
 
 // App
 const app = express();
 app.use(express.json());
 
 // Middleware
-app.options('*', cors());
-app.use(cors({
-    origin: ['https://main.d2ua1ewdznhv26.amplifyapp.com', 'https://main.d2m80lfwl4zikf.amplifyapp.com', 'http://localhost:3000', 'http://localhost:4000'],
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.options("*", cors());
+app.use(
+  cors({
+    origin: [
+      "https://main.d2ua1ewdznhv26.amplifyapp.com",
+      "https://main.d2m80lfwl4zikf.amplifyapp.com",
+      "http://localhost:3000",
+      "http://localhost:4000",
+      "https://main.dg5u78k9pgwbk.amplifyapp.com",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+app.use(bodyParser.json());
 
-pool1.getConnection((err, connection1) => {
-    if (err) {
-        console.error('Error connecting to database pool1', err);
-        return;
-    }
-    console.log('Connected to pool1');
+const dbConnection = (pool) => {
+  return (req, res, next) => {
+    pool.getConnection((error, connection) => {
+      if (error) {
+        console.error("Error connecting to db", error);
+        return res.status(500).json({ error: "Database connection failed" });
+      }
+      req.dbConnection = connection;
+      res.on("finish", () => {
+        req.dbConnection.release();
+      });
+      next();
+    });
+  };
+};
 
-    // Routes using pool1
-    app.use('/policeapp', (req, res, next) => {
-        req.dbConnection = connection1;
-        next();
-    }, policeAppRouter);
-});
+// Routes using pool1
+app.use("/policeapp", dbConnection(pool1), policeAppRouter);
 
-pool2.getConnection((err, connection2) => {
-    if (err) {
-        console.error('Error connecting to database pool2', err);
-        return;
-    }
-    console.log('Connected to pool2');
+// Routes using pool2
+app.use("/ringcon", dbConnection(pool2), ringconRouter);
 
-    // Routes using pool2
-    app.use('/ringcon', (req, res, next) => {
-        req.dbConnection = connection2;
-        next();
-    }, ringconRouter);
-});
+// Routes using pool3
+app.use("/fujiseal", dbConnection(pool3), fujiRouter);
 
-    const options = {
+/*  const options = {
         key: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/privkey.pem'),
         cert: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/policeappserver.duckdns.org/chain.pem'),
-    }; 
-    
-    
-    const server = https.createServer(options, app);
-    
-    //porting
-    const port = process.env.PORT || 4000;
-    //listener
-    server.listen(port, () => console.log(`Server is Live ${port}`));
-    console.log('Server started successfully');
+    }; */
+
+const server = https.createServer(/* options, */ app);
+
+//porting
+const port = process.env.PORT || 4000;
+//listener
+server.listen(port, () => console.log(`Server is Live ${port}`));
+console.log("Server started successfully");
