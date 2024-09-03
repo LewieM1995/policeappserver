@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const pool = require('../../database'); // Adjust the path to your database configuration
+const pool = require('../../../database'); // Adjust the path to your database configuration
 
 const addUser = async (username, password) => {
   try {
